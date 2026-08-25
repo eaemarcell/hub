@@ -18,7 +18,3 @@ Fornecer um ambiente simples e centralizado para:
 ## Infraestrutura
 
 A plataforma foi desenvolvida sobre uma arquitetura leve containerizada, garantindo alta disponibilidade e facilidade na manutenção dos serviços.
-
-## Acesso
-
-Acesse: https://hub.amt.net.br/
