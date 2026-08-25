@@ -1,0 +1,56 @@
+/* --- CONFIGURAÇÕES MODO ESCURO (DARK MODE) --- */
+body.dark {
+    background-color: #0f172a !important; /* slate-900 */
+    color: #f8fafc !important; /* slate-50 */
+}
+
+/* Header, Navbars, Cards e Modais em Modo Escuro */
+body.dark header,
+body.dark nav,
+body.dark .bg-white,
+body.dark #modal-usuario > div {
+    background-color: #1e293b !important; /* slate-800 */
+    border-color: #334155 !important; /* slate-700 */
+    color: #f1f5f9 !important;
+}
+
+/* Campos de Formulário */
+body.dark input,
+body.dark select,
+body.dark textarea {
+    background-color: #0f172a !important; /* slate-900 */
+    border-color: #475569 !important; /* slate-600 */
+    color: #f8fafc !important;
+}
+
+body.dark input[readonly] {
+    background-color: #0f172a !important;
+    color: #60a5fa !important;
+}
+
+/* Tabelas */
+body.dark thead {
+    background-color: #0f172a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark tbody tr:hover {
+    background-color: #334155 !important;
+}
+
+body.dark td, body.dark th {
+    border-color: #334155 !important;
+}
+
+/* Rótulos e Textos */
+body.dark label,
+body.dark h1, body.dark h2, body.dark h3, body.dark h4,
+body.dark span.text-slate-800, body.dark span.text-slate-900,
+body.dark p.text-slate-900 {
+    color: #f8fafc !important;
+}
+
+body.dark .text-slate-500,
+body.dark .text-slate-600 {
+    color: #94a3b8 !important;
+}

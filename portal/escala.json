@@ -1,0 +1,366 @@
+[
+  {
+    "data": "01/08",
+    "dia_semana": "sáb",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Thiago Costa Afonso Pereira"
+  },
+  {
+    "data": "02/08",
+    "dia_semana": "dom",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Marcell Correa Claudio Geromel"
+  },
+  {
+    "data": "03/08",
+    "dia_semana": "seg",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Robson Cunha Erick Silva"
+  },
+  {
+    "data": "03/08",
+    "dia_semana": "seg",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Robson Cunha Fabio Fontana"
+  },
+  {
+    "data": "04/08",
+    "dia_semana": "ter",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Marcell Correa Marcell Correa"
+  },
+  {
+    "data": "04/08",
+    "dia_semana": "ter",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Marcell Correa Robson Cunha"
+  },
+  {
+    "data": "05/08",
+    "dia_semana": "qua",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Erick Silva Rogerio Lima"
+  },
+  {
+    "data": "05/08",
+    "dia_semana": "qua",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Erick Silva Thiago Costa"
+  },
+  {
+    "data": "06/08",
+    "dia_semana": "qui",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Afonso Pereira"
+  },
+  {
+    "data": "06/08",
+    "dia_semana": "qui",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Afonso Pereira"
+  },
+  {
+    "data": "07/08",
+    "dia_semana": "sex",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "07/08",
+    "dia_semana": "sex",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "08/08",
+    "dia_semana": "sáb",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Fabio Fontana"
+  },
+  {
+    "data": "09/08",
+    "dia_semana": "dom",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Marcell Correa"
+  },
+  {
+    "data": "10/08",
+    "dia_semana": "seg",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Robson Cunha"
+  },
+  {
+    "data": "10/08",
+    "dia_semana": "seg",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Robson Cunha"
+  },
+  {
+    "data": "11/08",
+    "dia_semana": "ter",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Marcell Correa"
+  },
+  {
+    "data": "11/08",
+    "dia_semana": "ter",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Marcell Correa"
+  },
+  {
+    "data": "12/08",
+    "dia_semana": "qua",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Erick Silva"
+  },
+  {
+    "data": "12/08",
+    "dia_semana": "qua",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Erick Silva"
+  },
+  {
+    "data": "13/08",
+    "dia_semana": "qui",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Afonso Pereira"
+  },
+  {
+    "data": "13/08",
+    "dia_semana": "qui",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Afonso Pereira"
+  },
+  {
+    "data": "14/08",
+    "dia_semana": "sex",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "14/08",
+    "dia_semana": "sex",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "15/08",
+    "dia_semana": "sáb",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Erick Silva"
+  },
+  {
+    "data": "16/08",
+    "dia_semana": "dom",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Fabio Fontana"
+  },
+  {
+    "data": "17/08",
+    "dia_semana": "seg",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Robson Cunha"
+  },
+  {
+    "data": "17/08",
+    "dia_semana": "seg",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Robson Cunha"
+  },
+  {
+    "data": "18/08",
+    "dia_semana": "ter",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Marcell Correa"
+  },
+  {
+    "data": "18/08",
+    "dia_semana": "ter",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Marcell Correa"
+  },
+  {
+    "data": "19/08",
+    "dia_semana": "qua",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Erick Silva"
+  },
+  {
+    "data": "19/08",
+    "dia_semana": "qua",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Erick Silva"
+  },
+  {
+    "data": "20/08",
+    "dia_semana": "qui",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Claudio Geromel"
+  },
+  {
+    "data": "20/08",
+    "dia_semana": "qui",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Claudio Geromel"
+  },
+  {
+    "data": "21/08",
+    "dia_semana": "sex",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "21/08",
+    "dia_semana": "sex",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "22/08",
+    "dia_semana": "sáb",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Rogerio Lima"
+  },
+  {
+    "data": "23/08",
+    "dia_semana": "dom",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "24/08",
+    "dia_semana": "seg",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Robson Cunha"
+  },
+  {
+    "data": "24/08",
+    "dia_semana": "seg",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Robson Cunha"
+  },
+  {
+    "data": "25/08",
+    "dia_semana": "ter",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Marcell Correa"
+  },
+  {
+    "data": "25/08",
+    "dia_semana": "ter",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Marcell Correa"
+  },
+  {
+    "data": "26/08",
+    "dia_semana": "qua",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Erick Silva"
+  },
+  {
+    "data": "26/08",
+    "dia_semana": "qua",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Erick Silva"
+  },
+  {
+    "data": "27/08",
+    "dia_semana": "qui",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Claudio Geromel"
+  },
+  {
+    "data": "27/08",
+    "dia_semana": "qui",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Claudio Geromel"
+  },
+  {
+    "data": "28/08",
+    "dia_semana": "sex",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "28/08",
+    "dia_semana": "sex",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Thiago Costa"
+  },
+  {
+    "data": "29/08",
+    "dia_semana": "sáb",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Fabio Fontana"
+  },
+  {
+    "data": "30/08",
+    "dia_semana": "dom",
+    "inicio": "0:00",
+    "fim": "24:00",
+    "tecnico": "Afonso Pereira"
+  },
+  {
+    "data": "31/08",
+    "dia_semana": "seg",
+    "inicio": "0:00",
+    "fim": "09:00",
+    "tecnico": "Robson Cunha"
+  },
+  {
+    "data": "31/08",
+    "dia_semana": "seg",
+    "inicio": "21:00",
+    "fim": "24:00",
+    "tecnico": "Robson Cunha"
+  }
+]

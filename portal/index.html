@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMT-HUB - Central de Aplicações</title>
+  
+  <link rel="icon" type="image/x-icon" href="/fav.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 font-sans text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col justify-between transition-colors duration-200">
+
+  <!-- Header Expandido nas Pontas (w-full px-6) -->
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 sticky top-0 z-50 transition-colors duration-200 w-full">
+    <div class="w-full flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <img src="icon.svg" class="h-8 w-auto object-contain" alt="Logo AMT">
+        <div>
+          <h1 class="text-xl font-bold tracking-wide text-slate-900 dark:text-slate-100 leading-tight">AMT-HUB</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Central Unificada de Sistemas e Ferramentas</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        <button id="btn-theme-toggle" onclick="alternarTema()" class="p-2 text-slate-500 dark:text-slate-300 hover:text-blue-600 dark:hover:text-yellow-400 rounded-lg transition flex items-center gap-2 text-xs font-medium cursor-pointer" title="Alternar Modo Escuro">
+          <i data-lucide="moon" id="icon-theme" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal Expandido em 100% da Tela (w-full px-6) -->
+  <main class="w-full px-6 py-8 flex-1">
+    
+    <!-- Banner Dinâmico de Sobreaviso (SA) Expandido -->
+    <div class="mb-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between w-full">
+      
+      <!-- SA de Hoje -->
+      <div class="flex items-center gap-4 w-full md:w-auto">
+        <div class="bg-amber-500/10 text-amber-500 p-3 rounded-xl">
+          <i data-lucide="shield-alert" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-wider text-amber-500">SA de Hoje</span>
+          <h4 id="saAtualNome" class="text-base font-bold text-slate-900 dark:text-white">Sem escala importada</h4>
+          <p id="saAtualHorario" class="text-xs text-slate-500 dark:text-slate-400">--:-- às --:--</p>
+        </div>
+      </div>
+
+      <div class="hidden md:block w-px h-10 bg-slate-200 dark:bg-slate-700"></div>
+
+      <!-- Próximo SA -->
+      <div class="flex items-center gap-4 w-full md:w-auto">
+        <div class="bg-blue-500/10 text-blue-500 p-3 rounded-xl">
+          <i data-lucide="clock" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-wider text-blue-500">Próximo SA</span>
+          <h4 id="saProximoNome" class="text-base font-bold text-slate-900 dark:text-white">Aguardando dados</h4>
+          <p id="saProximoHorario" class="text-xs text-slate-500 dark:text-slate-400">--/-- • --:-- às --:--</p>
+        </div>
+      </div>
+
+      <!-- Botão para Importar Escala PDF -->
+      <div>
+        <label class="cursor-pointer bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2 border border-slate-200 dark:border-slate-600/50">
+          <i data-lucide="file-up" class="w-4 h-4 text-blue-500"></i>
+          <span>Importar Escala PDF</span>
+          <input type="file" id="pdfInput" accept="application/pdf" class="hidden" onchange="uploadEscalaPdf(event)">
+        </label>
+      </div>
+    </div>
+
+    <!-- Título de Aplicações -->
+    <div class="mb-6 flex justify-between items-end w-full">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-1">Aplicações Disponíveis</h2>
+        <p class="text-slate-500 dark:text-slate-400 text-xs">Aplicações locais com <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-amber-500/20 text-amber-500 text-[10px] font-bold">!</span> possuem posição fixa no início.</p>
+      </div>
+    </div>
+
+    <!-- Grid de Aplicações Expandido (grid-cols-2 até xl:grid-cols-6) -->
+    <div id="appsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 w-full"></div>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 p-5 text-center text-xs text-slate-500 transition-colors duration-200 w-full">
+    AMT-HUB &bull; Infraestrutura Local &bull; Docker Container Engine &bull; Desenvolvido por Marcell Correa
+  </footer>
+
+  <!-- Modal para Adicionar / Editar Aplicação -->
+  <div id="appModal" class="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl max-w-md w-full p-6 shadow-xl space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
+        <h3 id="modalTitle" class="text-base font-bold text-slate-900 dark:text-slate-100">Cadastrar Nova Aplicação</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="appForm" onsubmit="saveApp(event)" class="space-y-4">
+        <input type="hidden" id="appId">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-1">Nome do Sistema *</label>
+          <input type="text" id="appName" required placeholder="Ex: Zabbix, Grafana..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-1">URL / Link de Acesso *</label>
+          <input type="text" id="appUrl" required placeholder="Ex: /zabbix/ ou http://172.16.1.47:8080" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-1">Ícone Pré-definido *</label>
+            <select id="appIcon" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+              <option value="box">📦 Caixas / Padrão (box)</option>
+              <option value="server">🖥️ Servidor (server)</option>
+              <option value="database">💾 Banco de Dados (database)</option>
+              <option value="shield-check">🛡️ Segurança / Firewall (shield-check)</option>
+              <option value="clock">⏱️ Relógio / Horas (clock)</option>
+              <option value="key-round">🔑 Chave / Senha (key-round)</option>
+              <option value="activity">📈 Monitoramento / Saúde (activity)</option>
+              <option value="cpu">⚡ Processamento (cpu)</option>
+              <option value="hard-drive">💿 Armazenamento (hard-drive)</option>
+              <option value="globe">🌐 Web / Rede (globe)</option>
+              <option value="terminal">⌨️ Terminal / Console (terminal)</option>
+              <option value="lock">🔒 Autenticação (lock)</option>
+              <option value="wifi">📡 Conectividade (wifi)</option>
+              <option value="bar-chart-2">📊 Dashboards (bar-chart-2)</option>
+              <option value="file-text">📄 Relatórios / Documentos (file-text)</option>
+              <option value="layout-grid">🔲 Painel de Controle (layout-grid)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-1">URL da Imagem (Opcional)</label>
+            <input type="url" id="appImg" placeholder="https://..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="flex items-center space-x-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer pt-1">
+            <input type="checkbox" id="appIsLocal" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+            <span>Aplicação Rodando Localmente (Exibir "!" e Fixar no início)</span>
+          </label>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded-lg text-sm font-medium transition">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-lg text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium transition">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let draggedItemIndex = null;
+    let appsList = [];
+
+    const defaultApps = [
+      { id: 'sighe', name: 'SIGHE', url: '/sighe/', icon: 'clock', color: 'blue', isLocal: true, isDefault: true },
+      { id: 'pfviewer', name: 'pfViewer', url: '/pfviewer/', icon: 'shield-check', color: 'blue', isLocal: true, isDefault: true }
+    ];
+
+    function aplicarTemaSalvo() {
+      const savedTheme = localStorage.getItem('amt_theme') || 'dark';
+      const html = document.documentElement;
+      const icon = document.getElementById('icon-theme');
+
+      if (savedTheme === 'dark') {
+        html.classList.add('dark');
+        if (icon) icon.setAttribute('data-lucide', 'sun');
+      } else {
+        html.classList.remove('dark');
+        if (icon) icon.setAttribute('data-lucide', 'moon');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function alternarTema() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const newTheme = isDark ? 'light' : 'dark';
+      localStorage.setItem('amt_theme', newTheme);
+      aplicarTemaSalvo();
+    }
+
+    async function fetchStatusSA() {
+      try {
+        const res = await fetch('/api/escala/status');
+        if (res.ok) {
+          const data = await res.json();
+          
+          if (data.sa_atual && data.sa_atual.length > 0) {
+            const nomes = data.sa_atual.map(i => i.tecnico).join(', ');
+            const horarios = data.sa_atual.map(i => `${i.inicio} às ${i.fim}`).join(' | ');
+            document.getElementById('saAtualNome').textContent = nomes;
+            document.getElementById('saAtualHorario').textContent = horarios;
+          } else {
+            document.getElementById('saAtualNome').textContent = "Sem SA escalado para hoje";
+            document.getElementById('saAtualHorario').textContent = "Folga de sobreaviso";
+          }
+
+          if (data.proximo_sa) {
+            document.getElementById('saProximoNome').textContent = data.proximo_sa.tecnico;
+            document.getElementById('saProximoHorario').textContent = `${data.proximo_sa.data} (${data.proximo_sa.dia_semana}) • ${data.proximo_sa.inicio} às ${data.proximo_sa.fim}`;
+          } else {
+            document.getElementById('saProximoNome').textContent = "Nenhum próximo escalado";
+            document.getElementById('saProximoHorario').textContent = "--";
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao buscar dados do SA:", e);
+      }
+    }
+
+    async function uploadEscalaPdf(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      try {
+        const res = await fetch('/api/escala/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/pdf' },
+          body: file
+        });
+        
+        if (res.ok) {
+          alert("Escala atualizada com sucesso!");
+          fetchStatusSA();
+        } else {
+          alert("Erro ao importar o PDF da escala.");
+        }
+      } catch (e) {
+        alert("Falha no envio do arquivo.");
+      }
+    }
+
+    async function fetchApps() {
+      try {
+        const res = await fetch('/api/apps');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            appsList = data;
+            renderApps();
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Erro na API de Apps:", e);
+      }
+      appsList = [...defaultApps];
+      renderApps();
+    }
+
+    async function syncApps(newApps) {
+      appsList = newApps;
+      renderApps();
+
+      try {
+        await fetch('/api/apps', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newApps)
+        });
+      } catch (e) {
+        console.error("Erro ao salvar:", e);
+      }
+    }
+
+    function renderApps() {
+      const grid = document.getElementById('appsGrid');
+      grid.innerHTML = '';
+
+      // ORDENAÇÃO AUTOMÁTICA: Aplicações locais (isLocal = true) ficam sempre no início
+      const sortedApps = [...appsList].sort((a, b) => {
+        if (a.isLocal && !b.isLocal) return -1;
+        if (!a.isLocal && b.isLocal) return 1;
+        return 0;
+      });
+
+      grid.innerHTML = `
+        <button onclick="openModal()" class="bg-slate-200/40 dark:bg-slate-800/30 hover:bg-slate-200/80 dark:hover:bg-slate-800/60 rounded-xl border border-dashed border-slate-300 dark:border-slate-700/80 hover:border-blue-500/50 p-4 flex flex-col justify-between text-left transition-all group cursor-pointer h-32">
+          <div class="flex justify-between items-start">
+            <div class="bg-slate-300/50 dark:bg-slate-700/30 group-hover:bg-blue-500/10 p-2.5 rounded-lg text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <i data-lucide="plus" class="w-5 h-5"></i>
+            </div>
+            <span class="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-slate-300/50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-400">Novo</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-bold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Nova Aplicação</h3>
+            <i data-lucide="plus" class="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:rotate-90 transition-all"></i>
+          </div>
+        </button>
+      `;
+
+      sortedApps.forEach((app, index) => {
+        let iconContent = app.img ? `<img src="${app.img}" class="w-5 h-5 object-contain" alt="icon">` :
+                          (app.icon && app.icon.startsWith('fa-')) ? `<i class="fa-solid ${app.icon} text-lg"></i>` :
+                          `<i data-lucide="${app.icon || 'box'}" class="w-5 h-5"></i>`;
+
+        const actions = !app.isDefault ? `
+          <div class="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button onclick="editApp(event, '${app.id}')" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-xs p-1" title="Editar"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+            <button onclick="deleteApp(event, '${app.id}')" class="text-slate-400 hover:text-rose-500 text-xs p-1" title="Excluir"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+          </div>
+        ` : '';
+
+        const localBadge = app.isLocal ? `<span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-500 border border-amber-500/30 flex items-center justify-center font-bold text-xs shadow-sm" title="Aplicação Local">!</span>` : '';
+        const isDraggable = !app.isLocal;
+
+        grid.innerHTML += `
+          <div ${isDraggable ? `draggable="true" ondragstart="handleDragStart(event, ${index})" ondragover="handleDragOver(event)" ondrop="handleDrop(event, ${index})" ondragend="handleDragEnd(event)"` : ''} 
+               class="group relative bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700/80 p-4 transition-all duration-300 shadow-sm hover:shadow-md flex flex-col justify-between h-32 ${isDraggable ? 'cursor-grab' : 'cursor-pointer'}">
+            <a href="${app.url}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-0"></a>
+            
+            <div class="flex justify-between items-start z-10 pointer-events-none">
+              <div class="bg-blue-500/10 p-2.5 rounded-lg text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                ${iconContent}
+              </div>
+              <div class="flex items-center gap-2 pointer-events-auto">
+                ${actions}
+                ${localBadge}
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between z-10 pointer-events-none">
+              <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">${app.name}</h3>
+              <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
+            </div>
+          </div>
+        `;
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleDragStart(e, index) {
+      if (appsList[index]?.isLocal) return e.preventDefault();
+      draggedItemIndex = index;
+      e.currentTarget.classList.add('opacity-40');
+    }
+
+    function handleDragOver(e) { e.preventDefault(); }
+
+    function handleDrop(e, targetIndex) {
+      e.preventDefault();
+      if (draggedItemIndex === null || draggedItemIndex === targetIndex || appsList[targetIndex].isLocal) return;
+      const updated = [...appsList];
+      const moved = updated.splice(draggedItemIndex, 1)[0];
+      updated.splice(targetIndex, 0, moved);
+      syncApps(updated);
+    }
+
+    function handleDragEnd(e) {
+      e.currentTarget.classList.remove('opacity-40');
+      draggedItemIndex = null;
+    }
+
+    function openModal() {
+      document.getElementById('appForm').reset();
+      document.getElementById('appId').value = '';
+      document.getElementById('appIsLocal').checked = false;
+      document.getElementById('modalTitle').textContent = 'Cadastrar Nova Aplicação';
+      document.getElementById('appModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeModal() {
+      document.getElementById('appModal').classList.add('hidden');
+    }
+
+    function saveApp(e) {
+      e.preventDefault();
+      const id = document.getElementById('appId').value || 'app_' + Date.now();
+      const updated = [...appsList];
+      const existingApp = updated.find(a => a.id === id);
+
+      const newApp = {
+        id,
+        name: document.getElementById('appName').value,
+        url: document.getElementById('appUrl').value,
+        icon: document.getElementById('appIcon').value || 'box',
+        img: document.getElementById('appImg').value,
+        isLocal: document.getElementById('appIsLocal').checked,
+        isDefault: existingApp ? existingApp.isDefault : false
+      };
+
+      const idx = updated.findIndex(a => a.id === id);
+      if (idx >= 0) updated[idx] = newApp;
+      else updated.push(newApp);
+
+      syncApps(updated);
+      closeModal();
+    }
+
+    function editApp(e, id) {
+      e.preventDefault();
+      e.stopPropagation();
+      const app = appsList.find(a => a.id === id);
+      if (!app) return;
+
+      document.getElementById('appId').value = app.id;
+      document.getElementById('appName').value = app.name;
+      document.getElementById('appUrl').value = app.url;
+      document.getElementById('appIcon').value = app.icon || 'box';
+      document.getElementById('appImg').value = app.img || '';
+      document.getElementById('appIsLocal').checked = !!app.isLocal;
+
+      document.getElementById('modalTitle').textContent = 'Editar Aplicação';
+      document.getElementById('appModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function deleteApp(e, id) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!confirm('Deseja realmente remover esta aplicação para todos os usuários?')) return;
+      syncApps(appsList.filter(a => a.id !== id));
+    }
+
+    aplicarTemaSalvo();
+    fetchApps();
+    fetchStatusSA();
+  </script>
+</body>
+</html>

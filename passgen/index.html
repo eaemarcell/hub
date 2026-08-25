@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Senhas</title>
+  
+  <!-- Ícone na Aba do Navegador -->
+  <link rel="icon" type="image/x-icon" href="/fav.ico">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex items-center justify-center p-4">
+
+  <div class="max-w-md w-full bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-2xl space-y-6">
+    
+    <!-- Cabeçalho -->
+    <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+      <div class="flex items-center space-x-3">
+        <div class="bg-blue-500/10 text-blue-400 p-2.5 rounded-xl">
+          <i data-lucide="key-round" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white leading-tight">Gerador de Senhas</h1>
+          <p class="text-xs text-slate-400">Segurança & Fortalecimento de Credenciais</p>
+        </div>
+      </div>
+      <a href="/" class="text-slate-400 hover:text-white text-xs flex items-center gap-1 transition">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+      </a>
+    </div>
+
+    <!-- Campo da Senha Gerada -->
+    <div class="relative flex items-center">
+      <input type="text" id="passwordOutput" readonly placeholder="Clique em Gerar..." class="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-4 pr-12 text-sm text-amber-400 font-mono tracking-wider focus:outline-none select-all">
+      <button onclick="copyPassword()" class="absolute right-2 text-slate-400 hover:text-white p-2 rounded-lg transition" title="Copiar Senha">
+        <i data-lucide="copy" id="copyIcon" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Indicador de Força -->
+    <div class="space-y-1">
+      <div class="flex justify-between text-xs">
+        <span class="text-slate-400">Força da Senha:</span>
+        <span id="strengthText" class="font-bold text-slate-400">--</span>
+      </div>
+      <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+        <div id="strengthBar" class="h-full w-0 transition-all duration-300 bg-slate-500"></div>
+      </div>
+    </div>
+
+    <!-- Opções de Configuração -->
+    <div class="space-y-4 pt-2">
+      <div>
+        <div class="flex justify-between text-xs font-semibold mb-2">
+          <label class="text-slate-300">Tamanho da Senha:</label>
+          <span id="lengthValue" class="text-blue-400 font-bold">16</span>
+        </div>
+        <input type="range" id="lengthSlider" min="6" max="64" value="16" oninput="updateLengthLabel()" class="w-full accent-blue-500 cursor-pointer">
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <label class="flex items-center space-x-2 bg-slate-900/50 p-2.5 rounded-lg border border-slate-700/50 cursor-pointer hover:border-slate-600 transition">
+          <input type="checkbox" id="chkUpper" checked class="rounded border-slate-700 text-blue-600 focus:ring-0 w-4 h-4">
+          <span class="text-slate-200">Maiúsculas (A-Z)</span>
+        </label>
+
+        <label class="flex items-center space-x-2 bg-slate-900/50 p-2.5 rounded-lg border border-slate-700/50 cursor-pointer hover:border-slate-600 transition">
+          <input type="checkbox" id="chkLower" checked class="rounded border-slate-700 text-blue-600 focus:ring-0 w-4 h-4">
+          <span class="text-slate-200">Minúsculas (a-z)</span>
+        </label>
+
+        <label class="flex items-center space-x-2 bg-slate-900/50 p-2.5 rounded-lg border border-slate-700/50 cursor-pointer hover:border-slate-600 transition">
+          <input type="checkbox" id="chkNumbers" checked class="rounded border-slate-700 text-blue-600 focus:ring-0 w-4 h-4">
+          <span class="text-slate-200">Números (0-9)</span>
+        </label>
+
+        <label class="flex items-center space-x-2 bg-slate-900/50 p-2.5 rounded-lg border border-slate-700/50 cursor-pointer hover:border-slate-600 transition">
+          <input type="checkbox" id="chkSymbols" checked class="rounded border-slate-700 text-blue-600 focus:ring-0 w-4 h-4">
+          <span class="text-slate-200">Símbolos (!@#$)</span>
+        </label>
+
+        <label class="flex items-center space-x-2 bg-slate-900/50 p-2.5 rounded-lg border border-slate-700/50 cursor-pointer hover:border-slate-600 transition col-span-2">
+          <input type="checkbox" id="chkAmbiguous" class="rounded border-slate-700 text-blue-600 focus:ring-0 w-4 h-4">
+          <span class="text-slate-200">Evitar Caracteres Confusos (l, 1, O, 0)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Botão Gerar -->
+    <button onclick="generatePassword()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+      <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+      <span>Gerar Nova Senha</span>
+    </button>
+  </div>
+
+  <script>
+    function updateLengthLabel() {
+      document.getElementById('lengthValue').textContent = document.getElementById('lengthSlider').value;
+      generatePassword();
+    }
+
+    function generatePassword() {
+      const length = parseInt(document.getElementById('lengthSlider').value);
+      const useUpper = document.getElementById('chkUpper').checked;
+      const useLower = document.getElementById('chkLower').checked;
+      const useNumbers = document.getElementById('chkNumbers').checked;
+      const useSymbols = document.getElementById('chkSymbols').checked;
+      const avoidAmbiguous = document.getElementById('chkAmbiguous').checked;
+
+      let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      let lower = "abcdefghijklmnopqrstuvwxyz";
+      let numbers = "0123456789";
+      let symbols = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+      if (avoidAmbiguous) {
+        upper = upper.replace(/[IO]/g, '');
+        lower = lower.replace(/[l]/g, '');
+        numbers = numbers.replace(/[01]/g, '');
+      }
+
+      let charset = "";
+      if (useUpper) charset += upper;
+      if (useLower) charset += lower;
+      if (useNumbers) charset += numbers;
+      if (useSymbols) charset += symbols;
+
+      if (!charset) {
+        document.getElementById('passwordOutput').value = "Selecione ao menos 1 opção";
+        updateStrength(0);
+        return;
+      }
+
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        password += charset[randomIndex];
+      }
+
+      document.getElementById('passwordOutput').value = password;
+      calculateStrength(password, length, useUpper, useLower, useNumbers, useSymbols);
+    }
+
+    function calculateStrength(pwd, length, u, l, n, s) {
+      let score = 0;
+      if (length >= 12) score += 2;
+      if (length >= 16) score += 2;
+      if (u) score += 1;
+      if (l) score += 1;
+      if (n) score += 1;
+      if (s) score += 2;
+
+      updateStrength(score);
+    }
+
+    function updateStrength(score) {
+      const bar = document.getElementById('strengthBar');
+      const text = document.getElementById('strengthText');
+
+      if (score <= 2) {
+        bar.style.width = '25%';
+        bar.className = 'h-full w-0 transition-all duration-300 bg-rose-500';
+        text.textContent = 'Fraca';
+        text.className = 'font-bold text-rose-500';
+      } else if (score <= 5) {
+        bar.style.width = '55%';
+        bar.className = 'h-full w-0 transition-all duration-300 bg-amber-500';
+        text.textContent = 'Média';
+        text.className = 'font-bold text-amber-500';
+      } else if (score <= 7) {
+        bar.style.width = '80%';
+        bar.className = 'h-full w-0 transition-all duration-300 bg-blue-500';
+        text.textContent = 'Forte';
+        text.className = 'font-bold text-blue-500';
+      } else {
+        bar.style.width = '100%';
+        bar.className = 'h-full w-0 transition-all duration-300 bg-emerald-500';
+        text.textContent = 'Muito Forte';
+        text.className = 'font-bold text-emerald-500';
+      }
+    }
+
+    function copyPassword() {
+      const field = document.getElementById('passwordOutput');
+      if (!field.value || field.value.startsWith('Selecione')) return;
+
+      navigator.clipboard.writeText(field.value);
+      const icon = document.getElementById('copyIcon');
+      icon.setAttribute('data-lucide', 'check');
+      icon.classList.add('text-emerald-400');
+      if (window.lucide) lucide.createIcons();
+
+      setTimeout(() => {
+        icon.setAttribute('data-lucide', 'copy');
+        icon.classList.remove('text-emerald-400');
+        if (window.lucide) lucide.createIcons();
+      }, 2000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      generatePassword();
+    });
+  </script>
+</body>
+</html>

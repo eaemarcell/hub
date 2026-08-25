@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Horas Extras</title>
+    
+    <link rel="icon" type="image/x-icon" href="fav.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 font-sans text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col justify-between transition-colors duration-200">
+
+    <!-- LOGIN -->
+    <div id="view-login" class="flex min-h-screen items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center mb-4">
+                    <img src="icon.svg" class="h-16 w-auto object-contain" alt="Logo AMT">
+                </div>
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">SIGHE</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Acesse sua conta para continuar</p>
+            </div>
+
+            <form id="form-login" onsubmit="event.preventDefault(); fazerLogin();" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">E-mail</label>
+                    <input type="email" id="login-email" required placeholder="seu.email@empresa.com" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Senha</label>
+                    <input type="password" id="login-senha" required placeholder="••••••••" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-900">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ESTRUTURA PRINCIPAL -->
+    <div id="view-dashboard" class="hidden min-h-screen flex flex-col">
+        
+        <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
+            <div class="flex items-center space-x-3">
+                <a href="/" title="Voltar ao AMT-HUB" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition mr-1">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                </a>
+                <img src="icon.svg" class="h-8 w-auto object-contain" alt="Logo AMT">
+                <div>
+                    <h2 class="font-bold text-slate-900 dark:text-slate-100 text-lg">SIGHE</h2>
+                    <span id="user-role-badge" class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"></span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button id="btn-theme-toggle" onclick="alternarTema()" class="p-2 text-slate-500 dark:text-slate-300 hover:text-blue-600 dark:hover:text-yellow-400 rounded-lg transition flex items-center gap-2 text-xs font-medium cursor-pointer" title="Alternar Modo Escuro">
+                    <i data-lucide="moon" id="icon-theme" class="w-5 h-5"></i>
+                </button>
+                <div class="text-right hidden sm:block">
+                    <p id="user-name" class="text-sm font-semibold text-slate-900 dark:text-slate-100"></p>
+                    <p id="user-email" class="text-xs text-slate-500 dark:text-slate-400"></p>
+                </div>
+                <button onclick="abrirModalMinhaSenha()" class="text-slate-500 dark:text-slate-300 hover:text-blue-600 p-2 rounded-lg transition" title="Alterar Minha Senha">
+                    <i data-lucide="key-round" class="w-5 h-5"></i>
+                </button>
+                <button onclick="fazerLogout()" class="text-slate-500 dark:text-slate-400 hover:text-red-600 p-2 rounded-lg transition" title="Sair">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- ABAS -->
+        <div class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6">
+            <nav class="flex space-x-6">
+                <button id="tab-btn-horas" onclick="alternarAba('horas')" class="py-3 px-1 font-medium text-sm border-b-2 border-blue-600 text-blue-600 flex items-center space-x-2">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> <span>Minhas Horas Extras</span>
+                </button>
+                <button id="tab-btn-admin" onclick="alternarAba('admin')" class="hidden py-3 px-1 font-medium text-sm border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 flex items-center space-x-2">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> <span>Painel do Administrador</span>
+                </button>
+                <button id="tab-btn-rh" onclick="alternarAba('rh')" class="hidden py-3 px-1 font-medium text-sm border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 flex items-center space-x-2">
+                    <i data-lucide="briefcase" class="w-4 h-4"></i> <span>Recursos Humanos</span>
+                </button>
+            </nav>
+        </div>
+
+        <main class="flex-1 p-6 max-w-7xl w-full mx-auto space-y-6">
+
+            <!-- TAB 1: HORAS EXTRAS -->
+            <div id="tab-content-horas" class="space-y-6">
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 id="titulo-form-he" class="text-lg font-semibold flex items-center gap-2">
+                            <i data-lucide="file-plus" class="w-5 h-5 text-blue-600"></i> Registrar Nova Hora Extra
+                        </h3>
+                        <div id="acoes-edicao-he" class="hidden flex items-center space-x-3">
+                            <button id="btn-excluir-he" type="button" onclick="excluirHoraExtra()" class="px-3 py-1 bg-red-100 text-red-700 rounded-lg text-xs font-medium flex items-center gap-1">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Excluir
+                            </button>
+                            <button id="btn-cancelar-edicao" type="button" onclick="cancelarEdicaoHoraExtra()" class="text-xs text-slate-500 underline font-medium">Cancelar Edição</button>
+                        </div>
+                    </div>
+                    
+                    <form id="form-hora-extra" onsubmit="event.preventDefault(); registrarHoraExtra();" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <input type="hidden" id="he-id-editando" value="">
+                        <div><label class="block text-xs font-semibold mb-1">Data *</label><input type="date" id="he-data" required class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900"></div>
+                        <div><label class="block text-xs font-semibold mb-1">Hora Início *</label><input type="time" id="he-inicio" required onchange="calcularTotalHoras()" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900"></div>
+                        <div><label class="block text-xs font-semibold mb-1">Hora Fim *</label><input type="time" id="he-fim" required onchange="calcularTotalHoras()" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900"></div>
+                        <div><label class="block text-xs font-semibold mb-1">Total Calculado</label><input type="text" id="he-total-horas" readonly placeholder="00h 00m" class="w-full px-3 py-2 border rounded-lg text-sm font-bold text-blue-600 dark:bg-slate-900"></div>
+                        <div><label class="block text-xs font-semibold mb-1">Nº do Chamado *</label><input type="text" id="he-sa" required placeholder="Ex: SA-10293" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900"></div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1">Nome do Requerente *</label>
+                            <select id="he-requerente" required class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                                <option value="">-- Selecione o Requerente --</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold mb-1">Situação / Sobreaviso *</label>
+                            <select id="he-tipo-acionamento" required class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                                <option value="">-- Selecione uma opção --</option>
+                                <option value="1 - Sim, estou de sobreaviso">1 - Sim, estou de sobreaviso</option>
+                                <option value="2 - Não, porém fui acionado fora do horário comercial">2 - Não, porém fui acionado fora do horário comercial</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-3">
+                            <label class="block text-xs font-semibold mb-1">Motivo / Descrição *</label>
+                            <input type="text" id="he-motivo" required placeholder="Descreva brevemente a atividade realizada" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition flex justify-center items-center gap-2">
+                                <i data-lucide="send" class="w-4 h-4"></i> <span id="btn-salvar-he-texto">Salvar Horas</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+                    <div class="p-4 border-b border-slate-200 dark:border-slate-700"><h3 class="font-semibold">Meus Registros Recentes</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead class="bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400">
+                                <tr>
+                                    <th class="p-3">Data</th><th class="p-3">Chamado</th><th class="p-3">Requerente</th><th class="p-3 whitespace-nowrap">Horário / Total</th><th class="p-3 text-center" title="1 = Sobreaviso | 2 = Fora do Horário Comercial">Sit.</th><th class="p-3">Motivo</th><th class="p-3">Status / Dia Pago</th><th class="p-3 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-minhas-horas" class="divide-y divide-slate-100 dark:divide-slate-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: ADMIN -->
+            <div id="tab-content-admin" class="hidden space-y-6">
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold flex items-center gap-2"><i data-lucide="users" class="w-5 h-5 text-blue-600"></i> Gerenciamento de Colaboradores</h3>
+                        <button onclick="abrirModalUsuario()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg text-sm flex items-center gap-2">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i> Novo Colaborador
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead class="bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400">
+                                <tr><th class="p-3">Nome</th><th class="p-3">E-mail</th><th class="p-3">Perfis / Grupos</th><th class="p-3">Status</th><th class="p-3 text-right">Ação</th></tr>
+                            </thead>
+                            <tbody id="lista-usuarios" class="divide-y divide-slate-100 dark:divide-slate-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+                    <div class="p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+                        <h3 class="font-semibold flex items-center gap-2"><i data-lucide="database" class="w-5 h-5 text-blue-600"></i> Todas as Horas Extras Registradas (Visão Admin)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead class="bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400">
+                                <tr><th class="p-3">Colaborador</th><th class="p-3">Data</th><th class="p-3">Chamado</th><th class="p-3">Requerente</th><th class="p-3 whitespace-nowrap">Horário / Total</th><th class="p-3 text-center" title="1 = Sobreaviso | 2 = Fora do Horário Comercial">Sit.</th><th class="p-3">Motivo</th><th class="p-3">Status / Dia Pago</th><th class="p-3 text-right">Ação</th></tr>
+                            </thead>
+                            <tbody id="lista-todas-horas" class="divide-y divide-slate-100 dark:divide-slate-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: RECURSOS HUMANOS -->
+            <div id="tab-content-rh" class="hidden space-y-6">
+                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="text-lg font-semibold flex items-center gap-2 text-slate-900 dark:text-slate-100">
+                                <i data-lucide="briefcase" class="w-5 h-5 text-emerald-600"></i> Gestão do RH e Pagamentos
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Filtre por grupo, colaborador, período e exporte relatórios consolidados.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="limparFiltrosRH()" class="px-3 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-medium rounded-lg text-sm transition flex items-center gap-1">
+                                <i data-lucide="filter-x" class="w-4 h-4"></i> Limpar Filtros
+                            </button>
+                            <button onclick="exportarRelatorioCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg text-sm transition flex items-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i> Gerar Relatório CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 pt-2 border-t border-slate-200 dark:border-slate-700">
+                        <div>
+                            <label class="block text-xs font-semibold mb-1">Grupo de Acesso</label>
+                            <select id="rh-filtro-grupo" onchange="aoMudarGrupoFiltroRH()" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                                <option value="todos">Todos os Grupos</option>
+                                <option value="amt">Analista AMT</option>
+                                <option value="externo">Analista Externo</option>
+                                <option value="rh">Recursos Humanos (RH)</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1">Colaborador</label>
+                            <select id="rh-filtro-usuario" onchange="carregarHorasRH()" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                                <option value="todos">Todos os Colaboradores</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1">Data Início</label>
+                            <input type="date" id="rh-filtro-inicio" onchange="carregarHorasRH()" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1">Data Fim</label>
+                            <input type="date" id="rh-filtro-fim" onchange="carregarHorasRH()" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1">Status do Pagamento</label>
+                            <select id="rh-filtro-status" onchange="carregarHorasRH()" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                                <option value="todos">Todos os Status</option>
+                                <option value="Pendente">Apenas Pendentes</option>
+                                <option value="Pago">Apenas Pagos</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+                    <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-100">Chamados Registrados para Folha</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead class="bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
+                                <tr>
+                                    <th class="p-3">Colaborador</th>
+                                    <th class="p-3">Data</th>
+                                    <th class="p-3">Chamado</th>
+                                    <th class="p-3 whitespace-nowrap">Horário / Total</th>
+                                    <th class="p-3 text-center" title="1 = Sobreaviso | 2 = Fora do Horário Comercial">Sit.</th>
+                                    <th class="p-3">Motivo</th>
+                                    <th class="p-3 text-center">Adicional H.E.</th>
+                                    <th class="p-3">Status Atual</th>
+                                    <th class="p-3">Dia / Hora do Pagamento</th>
+                                    <th class="p-3 text-right">Alterar Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-horas-rh" class="divide-y divide-slate-100 dark:divide-slate-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL COMPLETO: NOVO OU EDITAR COLABORADOR -->
+    <div id="modal-usuario" class="hidden fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 w-full max-w-md p-6 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 id="modal-usuario-titulo" class="font-bold text-lg text-slate-900 dark:text-slate-100">Cadastrar Colaborador</h3>
+                <button onclick="fecharModalUsuario()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <form id="form-usuario" onsubmit="event.preventDefault(); salvarUsuario();" class="space-y-4">
+                <input type="hidden" id="usr-id-editando" value="">
+
+                <div>
+                    <label class="block text-xs font-semibold mb-1">Nome Completo *</label>
+                    <input type="text" id="usr-nome" required class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1">E-mail *</label>
+                    <input type="email" id="usr-email" required class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                </div>
+                
+                <div>
+                    <label id="lbl-usr-senha" class="block text-xs font-semibold mb-1">Senha Inicial *</label>
+                    <input type="password" id="usr-senha" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900" placeholder="••••••••">
+                    <p id="msg-usr-senha-edit" class="hidden text-[11px] text-slate-400 mt-1">Deixe em branco caso não queira alterar a senha atual do colaborador.</p>
+                </div>
+
+                <div id="box-usr-status" class="hidden">
+                    <label class="block text-xs font-semibold mb-1">Status da Conta *</label>
+                    <select id="usr-ativo" class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                        <option value="true">Ativo (Pode acessar o sistema)</option>
+                        <option value="false">Inativo (Bloqueado de acessar)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold mb-2">Grupos de Acesso (Selecione ao menos um) *</label>
+                    <div class="space-y-2 bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer">
+                            <input type="checkbox" id="usr-amt" class="rounded text-blue-600">
+                            <span>Analista AMT</span>
+                        </label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer">
+                            <input type="checkbox" id="usr-tecnico" class="rounded text-teal-600">
+                            <span class="font-semibold text-teal-600 dark:text-teal-400">Técnico AMT (Apenas Requerente)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer">
+                            <input type="checkbox" id="usr-externo" class="rounded text-blue-600">
+                            <span>Analista Externo</span>
+                        </label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer">
+                            <input type="checkbox" id="usr-rh" class="rounded text-emerald-600">
+                            <span class="font-semibold text-emerald-600 dark:text-emerald-400">Recursos Humanos (RH)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 text-sm cursor-pointer">
+                            <input type="checkbox" id="usr-admin" class="rounded text-purple-600">
+                            <span class="font-semibold text-purple-700 dark:text-purple-400">Administrador</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-700">
+                    <button id="btn-excluir-usuario" type="button" onclick="excluirUsuarioDefinitivo()" class="hidden px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/40 dark:text-red-300 rounded-lg text-xs font-semibold transition flex items-center gap-1">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i> Excluir Conta
+                    </button>
+
+                    <div class="flex space-x-2 ml-auto">
+                        <button type="button" onclick="fecharModalUsuario()" class="px-4 py-2 border rounded-lg text-sm font-medium">Cancelar</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ALTERAR MINHA SENHA -->
+    <div id="modal-minha-senha" class="hidden fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 w-full max-w-sm p-6 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-slate-900 dark:text-slate-100">Alterar Minha Senha</h3>
+                <button onclick="fecharModalMinhaSenha()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <form onsubmit="event.preventDefault(); alterarMinhaSenha();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold mb-1">Senha Atual *</label>
+                    <input type="password" id="senha-atual" required class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1">Nova Senha *</label>
+                    <input type="password" id="nova-senha" required class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1">Confirmar Nova Senha *</label>
+                    <input type="password" id="confirmar-nova-senha" required class="w-full px-3 py-2 border rounded-lg text-sm dark:bg-slate-900">
+                </div>
+
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" onclick="fecharModalMinhaSenha()" class="w-1/2 py-2 border rounded-lg text-sm font-medium">Cancelar</button>
+                    <button type="submit" class="w-1/2 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium">Atualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- RODAPÉ PADRONIZADO -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 p-5 text-center text-xs text-slate-500 transition-colors duration-200">
+        SIGHE &bull; Sistema de Gestão de Horas Extras &bull; Desenvolvido por Marcell Correa
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+services:
+  # 1. Nginx (Web Server + Proxy Reverso)
+  amt-nginx:
+    image: nginx:alpine
+    container_name: amt-nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./portal:/usr/share/nginx/html/portal:ro
+      - ./pfviewer:/usr/share/nginx/html/pfviewer:ro
+      - ./sighe/frontend:/usr/share/nginx/html/sighe-frontend:ro
+      - /opt/amt-hub/passgen:/usr/share/nginx/html/passgen:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - amt-sighe-api
+
+  # 2. Banco de Dados PostgreSQL (SIGHE)
+  amt-db:
+    image: postgres:16-alpine
+    container_name: amt-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: usuario_sighe
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: amt_sighe_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 3. Backend API Node.js (SIGHE)
+  amt-sighe-api:
+    build:
+      context: ./sighe
+    container_name: amt-sighe-api
+    restart: always
+    environment:
+      PORT: 3000
+      DB_USER: usuario_sighe
+      DB_PASSWORD: admin
+      DB_HOST: amt-db
+      DB_PORT: 5432
+      DB_NAME: amt_sighe_db
+    depends_on:
+      - amt-db
+
+volumes:
+  postgres_data:

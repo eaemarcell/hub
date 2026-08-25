@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pfViewer - Visualizador Completo do pfSense</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="fav.ico">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        pfsense: {
+                            red: '#A21C1C',
+                            dark: '#1E293B',
+                            light: '#F8FAFC'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- ESTILOS CUSTOMIZADOS PARA SCROLLBAR E MODO CLARO/ESCURO -->
+    <style>
+        /* Custom Scrollbar Fina e Elegante */
+        .tabs-scroll-container::-webkit-scrollbar {
+            height: 4px;
+        }
+        .tabs-scroll-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .tabs-scroll-container::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        html:not(.dark) .tabs-scroll-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+        }
+        html:not(.dark) .tabs-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        /* Corrigindo Cores no Modo Claro */
+        html:not(.dark) body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        html:not(.dark) header {
+            background-color: #ffffff;
+            border-color: #e2e8f0;
+        }
+        html:not(.dark) footer {
+            border-color: #e2e8f0 !important;
+            color: #64748b !important;
+        }
+        html:not(.dark) .bg-slate-800 {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .bg-slate-800\/40 {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+        html:not(.dark) .bg-slate-800\/80 {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .bg-slate-900 {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .bg-slate-900\/60 {
+            background-color: #f8fafc !important;
+        }
+        html:not(.dark) .text-white,
+        html:not(.dark) .text-slate-100,
+        html:not(.dark) .text-slate-200 {
+            color: #0f172a !important;
+        }
+        html:not(.dark) .text-slate-300,
+        html:not(.dark) .text-slate-400 {
+            color: #475569 !important;
+        }
+        html:not(.dark) table thead {
+            background-color: #f1f5f9 !important;
+            color: #475569 !important;
+        }
+        html:not(.dark) table tbody tr {
+            border-color: #f1f5f9 !important;
+        }
+        html:not(.dark) table tbody tr:hover {
+            background-color: #f8fafc !important;
+        }
+        html:not(.dark) .border-slate-700 {
+            border-color: #e2e8f0 !important;
+        }
+
+        /* Ajuste para Botão Limpar */
+        html:not(.dark) #btnReset {
+            background-color: #e2e8f0 !important;
+            color: #1e293b !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        html:not(.dark) #btnReset:hover {
+            background-color: #cbd5e1 !important;
+        }
+
+        /* Destaques Coloridos */
+        html:not(.dark) .text-emerald-500,
+        html:not(.dark) .text-emerald-400 {
+            color: #047857 !important;
+        }
+        html:not(.dark) .text-amber-500,
+        html:not(.dark) .text-amber-400 {
+            color: #b45309 !important;
+        }
+        html:not(.dark) .text-blue-500,
+        html:not(.dark) .text-blue-400 {
+            color: #1d4ed8 !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased transition-colors duration-200">
+
+    <!-- CABEÇALHO -->
+    <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 sticky top-0 z-50 transition-colors duration-200">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600/20 p-2.5 rounded-lg border border-blue-500/30 text-blue-500">
+                    <i class="fa-solid fa-shield-halved text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide leading-tight">pfViewer</h1>
+                    <p class="text-xs text-slate-400">Análise Completa e Visualização Offline do XML do pfSense</p>
+                </div>
+            </div>
+
+            <!-- Botões de Ação & Tema Padronizado -->
+            <div class="flex items-center gap-3">
+                <button id="btn-theme-toggle" onclick="alternarTema()" class="p-2 text-slate-500 dark:text-slate-300 hover:text-blue-600 dark:hover:text-yellow-400 rounded-lg transition flex items-center gap-2 text-xs font-medium cursor-pointer" title="Alternar Modo Escuro">
+                    <i data-lucide="moon" id="icon-theme" class="w-5 h-5"></i>
+                </button>
+
+                <label for="xmlFileInput" class="cursor-pointer px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-lg transition flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-file-code"></i>
+                    <span>Carregar config.xml</span>
+                </label>
+                <input type="file" id="xmlFileInput" accept=".xml" class="hidden" onchange="handleFileUpload(event)">
+                
+                <button id="btnReset" onclick="resetViewer()" class="hidden px-3.5 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium text-xs rounded-lg transition flex items-center gap-1.5 cursor-pointer shadow-sm" title="Limpar Arquivo">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Limpar</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-7xl mx-auto w-full px-6 py-8 flex-1 flex flex-col">
+        <div id="dropZone" class="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-700 hover:border-blue-500/50 bg-slate-800/40 rounded-2xl p-12 text-center transition-all cursor-pointer min-h-[400px]" onclick="document.getElementById('xmlFileInput').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+            <div class="bg-slate-800 p-4 rounded-full border border-slate-700 text-blue-500 mb-4 shadow-sm">
+                <i class="fa-solid fa-cloud-arrow-up text-4xl"></i>
+            </div>
+            <h2 class="text-lg font-bold mb-1">Selecione ou Arraste o arquivo XML do pfSense</h2>
+            <p class="text-xs text-slate-400 max-w-md mb-6">O processamento é realizado 100% localmente no seu navegador. Nenhum dado é enviado para servidores externos.</p>
+            <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-xs font-semibold shadow-sm">Procurar Arquivo...</span>
+        </div>
+
+        <div id="dashboard" class="hidden space-y-6">
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 grid grid-cols-2 md:grid-cols-5 gap-4 shadow-sm transition-colors duration-200">
+                <div>
+                    <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Hostname / FQDN</span>
+                    <span id="sysHostname" class="text-sm font-bold text-blue-500 leading-tight">-</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Versão do pfSense</span>
+                    <span id="sysVersion" class="text-sm font-semibold text-emerald-500 leading-tight">-</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">DNS Principal</span>
+                    <span id="sysDNS" class="text-sm font-mono leading-tight">-</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Fuso Horário</span>
+                    <span id="sysTimezone" class="text-sm font-semibold leading-tight">-</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">NTP Time Servers</span>
+                    <span id="sysNTP" class="text-sm font-mono truncate leading-tight block">-</span>
+                </div>
+            </div>
+
+            <div class="relative border-b border-slate-700 flex items-center">
+                <button onclick="scrollTabs(-200)" class="hidden md:flex p-2 text-slate-400 hover:text-blue-500 transition cursor-pointer" title="Rolar para esquerda">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+
+                <div id="tabsContainer" class="tabs-scroll-container flex space-x-2 overflow-x-auto py-2 w-full scroll-smooth">
+                    <button onclick="switchTab('interfaces')" id="tab-interfaces" class="tab-btn active py-2 px-3.5 font-semibold text-xs border-b-2 border-blue-500 text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-network-wired"></i> Interfaces & Gateway
+                    </button>
+                    <button onclick="switchTab('firewall')" id="tab-firewall" class="tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-shield-cat"></i> Firewall (<span id="countRules">0</span>)
+                    </button>
+                    <button onclick="switchTab('vpn')" id="tab-vpn" class="tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-lock"></i> VPNs (OpenVPN / IPsec)
+                    </button>
+                    <button onclick="switchTab('aliases')" id="tab-aliases" class="tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-list-check"></i> Aliases (<span id="countAliases">0</span>)
+                    </button>
+                    <button onclick="switchTab('dhcp')" id="tab-dhcp" class="tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-server"></i> Services & DHCP
+                    </button>
+                    <button onclick="switchTab('users')" id="tab-users" class="tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-users"></i> Usuários & Grupos
+                    </button>
+                    <button onclick="switchTab('certs')" id="tab-certs" class="tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-certificate"></i> Certificados & CAs
+                    </button>
+                    <button onclick="switchTab('pkgs')" id="tab-pkgs" class="tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-box-open"></i> Pacotes & Zabbix
+                    </button>
+                    <button onclick="switchTab('cron')" id="tab-cron" class="tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition">
+                        <i class="fa-solid fa-clock font-normal"></i> Cron Jobs
+                    </button>
+                </div>
+
+                <button onclick="scrollTabs(200)" class="hidden md:flex p-2 text-slate-400 hover:text-blue-500 transition cursor-pointer" title="Rolar para direita">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+
+            <!-- CONTEÚDO DAS ABAS -->
+            <div id="content-interfaces" class="tab-content space-y-6">
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Interfaces de Rede Mapeadas</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Interface</th>
+                                    <th class="p-3">Porta Física (IF)</th>
+                                    <th class="p-3">IP / Subrede</th>
+                                    <th class="p-3">Gateway Associado</th>
+                                    <th class="p-3">IPv6 Config</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listInterfaces" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Gateways & Roteamento Default</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Nome Gateway</th>
+                                    <th class="p-3">Interface</th>
+                                    <th class="p-3">Endereço IP Gateway</th>
+                                    <th class="p-3">Peso</th>
+                                    <th class="p-3">Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listGateways" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-firewall" class="tab-content hidden space-y-4">
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80 flex flex-col md:flex-row justify-between items-center gap-3">
+                        <h3 class="font-bold text-sm">Regras de Firewall (Filter Rules)</h3>
+                        <input type="text" id="searchRules" onkeyup="filterFirewallRules()" placeholder="Filtrar por porta, IP ou interface..." class="px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:outline-none focus:border-blue-500 w-full md:w-64">
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Ação</th>
+                                    <th class="p-3">Interface</th>
+                                    <th class="p-3">Proto</th>
+                                    <th class="p-3">Origem</th>
+                                    <th class="p-3">Destino</th>
+                                    <th class="p-3">Porta Dest.</th>
+                                    <th class="p-3">State Type</th>
+                                    <th class="p-3">Modificado Por</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listFirewallRules" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-vpn" class="tab-content hidden space-y-6">
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm text-blue-500 flex items-center gap-2"><i class="fa-solid fa-network-wired"></i> Servidores OpenVPN</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Descrição / Modo</th>
+                                    <th class="p-3">Porta / Proto</th>
+                                    <th class="p-3">Rede do Túnel (Client)</th>
+                                    <th class="p-3">Redes Locais Acessíveis</th>
+                                    <th class="p-3">Criptografia / Digest</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listOpenVPN" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm text-emerald-500 flex items-center gap-2"><i class="fa-solid fa-lock"></i> Túneis IPsec (Fase 1 & Fase 2)</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Descrição F1</th>
+                                    <th class="p-3">Gateway Remoto</th>
+                                    <th class="p-3">IKE Version / Auth</th>
+                                    <th class="p-3">Rede Local (F2)</th>
+                                    <th class="p-3">Rede Remota (F2)</th>
+                                    <th class="p-3">Encriptação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listIPsec" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-aliases" class="tab-content hidden space-y-4">
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Aliases Configurados</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Nome Alias</th>
+                                    <th class="p-3">Tipo</th>
+                                    <th class="p-3">Endereços / Hosts Cadastrados</th>
+                                    <th class="p-3">Detalhes / Histórico</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listAliases" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-dhcp" class="tab-content hidden space-y-6">
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Servidores DHCPd Configurados</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Interface</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3">Faixa de IP (Pool From - To)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listDHCP" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-users" class="tab-content hidden space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                        <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Usuários do Sistema</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                    <tr>
+                                        <th class="p-3">Username</th>
+                                        <th class="p-3">Nome / Descrição</th>
+                                        <th class="p-3">Grupo Principal</th>
+                                        <th class="p-3">UID</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listUsers" class="divide-y divide-slate-700/50"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                        <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Grupos do Sistema</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                    <tr>
+                                        <th class="p-3">Nome Grupo</th>
+                                        <th class="p-3">Descrição</th>
+                                        <th class="p-3">Escopo</th>
+                                        <th class="p-3">GID</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listGroups" class="divide-y divide-slate-700/50"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-certs" class="tab-content hidden space-y-6">
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Autoridades Certificadoras (CA)</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Ref ID</th>
+                                    <th class="p-3">Descrição</th>
+                                    <th class="p-3">Status Trust</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listCA" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Certificados Digitais Internos</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Ref ID</th>
+                                    <th class="p-3">Descrição</th>
+                                    <th class="p-3">Tipo</th>
+                                    <th class="p-3">CA Vinculada (Ref)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listCerts" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-pkgs" class="tab-content hidden space-y-6">
+                <div id="zabbixCard" class="hidden bg-slate-800 border border-blue-500/30 rounded-xl p-5 shadow-sm">
+                    <h3 class="text-sm font-bold text-blue-500 mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-line"></i> Agente Zabbix Configurado</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                        <div><span class="text-slate-400 block font-bold uppercase text-[10px]">Servidor Zabbix:</span> <span id="zabServer" class="font-mono">-</span></div>
+                        <div><span class="text-slate-400 block font-bold uppercase text-[10px]">Hostname Registrado:</span> <span id="zabHost" class="text-emerald-500 font-mono">-</span></div>
+                        <div><span class="text-slate-400 block font-bold uppercase text-[10px]">Porta do Agente:</span> <span id="zabPort" class="font-mono">-</span></div>
+                        <div><span class="text-slate-400 block font-bold uppercase text-[10px]">Status do Agente:</span> <span id="zabStatus" class="text-emerald-500 font-bold">-</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Pacotes Adicionais Instalados (Installed Packages)</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Nome do Pacote</th>
+                                    <th class="p-3">Versão</th>
+                                    <th class="p-3">Arquivo de Configuração</th>
+                                    <th class="p-3">Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listPackages" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-cron" class="tab-content hidden space-y-4">
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800/80"><h3 class="font-bold text-sm">Tarefas Agendadas do Sistema (Cron Jobs)</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase">
+                                <tr>
+                                    <th class="p-3">Agendamento (M H D M W)</th>
+                                    <th class="p-3">Usuário Executante</th>
+                                    <th class="p-3">Comando Executado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listCron" class="divide-y divide-slate-700/50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- RODAPÉ ATUALIZADO -->
+    <footer class="border-t border-slate-800 p-5 text-center text-xs text-slate-500 transition-colors duration-200">
+        pfViewer &bull; Leitor de Arquivos XML do pfSense &bull; Desenvolvido por Marcell Correa
+    </footer>
+
+    <script>
+        let xmlDocGlobal = null;
+
+        // --- SISTEMA DE TEMAS PADRONIZADO ---
+        function aplicarTemaSalvo() {
+            const savedTheme = localStorage.getItem('amt_theme') || localStorage.getItem('amt_hub_theme') || 'dark';
+            const html = document.documentElement;
+            const icon = document.getElementById('icon-theme');
+
+            if (savedTheme === 'dark') {
+                html.classList.add('dark');
+                if (icon) icon.setAttribute('data-lucide', 'sun');
+            } else {
+                html.classList.remove('dark');
+                if (icon) icon.setAttribute('data-lucide', 'moon');
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function alternarTema() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            const newTheme = isDark ? 'light' : 'dark';
+
+            localStorage.setItem('amt_theme', newTheme);
+            localStorage.setItem('amt_hub_theme', newTheme);
+            aplicarTemaSalvo();
+        }
+
+        function scrollTabs(amount) {
+            const container = document.getElementById('tabsContainer');
+            if (container) {
+                container.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) readXMLFile(file);
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const file = event.dataTransfer.files[0];
+            if (file) readXMLFile(file);
+        }
+
+        function readXMLFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const parser = new DOMParser();
+                xmlDocGlobal = parser.parseFromString(e.target.result, "text/xml");
+                parseAndRenderXML();
+            };
+            reader.readAsText(file);
+        }
+
+        function parseAndRenderXML() {
+            if (!xmlDocGlobal) return;
+
+            document.getElementById('dropZone').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('btnReset').classList.remove('hidden');
+
+            const hostname = xmlDocGlobal.querySelector("system > hostname")?.textContent || '-';
+            const domain = xmlDocGlobal.querySelector("system > domain")?.textContent || '-';
+            document.getElementById('sysHostname').textContent = `${hostname}.${domain}`;
+            document.getElementById('sysVersion').textContent = xmlDocGlobal.querySelector("pfsense > version")?.textContent || '-';
+            document.getElementById('sysDNS').textContent = xmlDocGlobal.querySelector("system > dnsserver")?.textContent || 'Nenhum';
+            document.getElementById('sysTimezone').textContent = xmlDocGlobal.querySelector("system > timezone")?.textContent || '-';
+            document.getElementById('sysNTP').textContent = xmlDocGlobal.querySelector("system > timeservers")?.textContent || '-';
+
+            parseInterfaces();
+            parseGateways();
+            parseFirewallRules();
+            parseVPNs();
+            parseAliases();
+            parseDHCP();
+            parseUsersAndGroups();
+            parseCertificates();
+            parsePackages();
+            parseCron();
+        }
+
+        function parseInterfaces() {
+            const tbody = document.getElementById('listInterfaces');
+            tbody.innerHTML = '';
+            const interfaces = xmlDocGlobal.querySelectorAll("interfaces > *");
+
+            interfaces.forEach(iface => {
+                const name = iface.tagName.toUpperCase();
+                const ifPort = iface.querySelector("if")?.textContent || '-';
+                const ip = iface.querySelector("ipaddr")?.textContent || 'DHCP/Destaque';
+                const subnet = iface.querySelector("subnet")?.textContent || '';
+                const gateway = iface.querySelector("gateway")?.textContent || 'Padrão';
+                const ipv6 = iface.querySelector("ipaddrv6")?.textContent || 'Desativado';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-bold text-blue-500">${name}</td>
+                        <td class="p-3 font-mono">${ifPort}</td>
+                        <td class="p-3 font-mono text-emerald-500">${ip}${subnet ? '/' + subnet : ''}</td>
+                        <td class="p-3 font-mono text-amber-500">${gateway}</td>
+                        <td class="p-3 font-mono text-slate-400">${ipv6}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function parseGateways() {
+            const tbody = document.getElementById('listGateways');
+            tbody.innerHTML = '';
+            const gateways = xmlDocGlobal.querySelectorAll("gateways > gateway_item");
+
+            gateways.forEach(gw => {
+                const name = gw.querySelector("name")?.textContent || '-';
+                const iface = gw.querySelector("interface")?.textContent || '-';
+                const ip = gw.querySelector("gateway")?.textContent || '-';
+                const weight = gw.querySelector("weight")?.textContent || '1';
+                const descr = gw.querySelector("descr")?.textContent || '-';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-bold text-amber-500">${name}</td>
+                        <td class="p-3 font-mono uppercase">${iface}</td>
+                        <td class="p-3 font-mono text-emerald-500">${ip}</td>
+                        <td class="p-3 font-mono text-slate-400">${weight}</td>
+                        <td class="p-3">${descr}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function parseFirewallRules() {
+            const tbody = document.getElementById('listFirewallRules');
+            tbody.innerHTML = '';
+            const rules = xmlDocGlobal.querySelectorAll("filter > rule");
+
+            document.getElementById('countRules').textContent = rules.length;
+
+            rules.forEach(rule => {
+                const type = rule.querySelector("type")?.textContent || 'pass';
+                const iface = rule.querySelector("interface")?.textContent || 'wan';
+                const proto = rule.querySelector("protocol")?.textContent || rule.querySelector("ipprotocol")?.textContent || 'any';
+                
+                const src = rule.querySelector("source > address")?.textContent || (rule.querySelector("source > any") ? 'qualquer' : 'any');
+                const dst = rule.querySelector("destination > address")?.textContent || (rule.querySelector("destination > any") ? 'qualquer' : 'any');
+                const dstPort = rule.querySelector("destination > port")?.textContent || '*';
+                const stateType = rule.querySelector("statetype")?.textContent || 'keep state';
+                const username = rule.querySelector("updated > username")?.textContent || rule.querySelector("created > username")?.textContent || '-';
+
+                let badgeType = '<span class="bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">PASS</span>';
+                if (type === 'block') {
+                    badgeType = '<span class="bg-rose-500/20 text-rose-500 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-bold">BLOCK</span>';
+                } else if (type === 'reject') {
+                    badgeType = '<span class="bg-amber-500/20 text-amber-500 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-bold">REJECT</span>';
+                }
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-700/30 rule-row">
+                        <td class="p-3">${badgeType}</td>
+                        <td class="p-3 font-bold uppercase">${iface}</td>
+                        <td class="p-3 font-mono text-slate-400">${proto}</td>
+                        <td class="p-3 font-mono text-blue-500">${src}</td>
+                        <td class="p-3 font-mono text-emerald-500">${dst}</td>
+                        <td class="p-3 font-mono text-amber-500">${dstPort}</td>
+                        <td class="p-3 text-slate-400">${stateType}</td>
+                        <td class="p-3 text-slate-400 max-w-xs truncate">${username}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function parseVPNs() {
+            const tbodyOpenVPN = document.getElementById('listOpenVPN');
+            tbodyOpenVPN.innerHTML = '';
+            const ovpnServers = xmlDocGlobal.querySelectorAll("openvpn > openvpn-server");
+
+            ovpnServers.forEach(ovpn => {
+                const descr = ovpn.querySelector("description")?.textContent || 'Servidor OpenVPN';
+                const mode = ovpn.querySelector("mode")?.textContent || '-';
+                const port = ovpn.querySelector("local_port")?.textContent || '1194';
+                const proto = ovpn.querySelector("protocol")?.textContent || 'UDP4';
+                const tunnelNet = ovpn.querySelector("tunnel_network")?.textContent || '-';
+                const localNet = ovpn.querySelector("local_network")?.textContent || '-';
+                const cipher = ovpn.querySelector("data_ciphers_fallback")?.textContent || ovpn.querySelector("data_ciphers")?.textContent || 'AES-256';
+                const digest = ovpn.querySelector("digest")?.textContent || 'SHA256';
+
+                tbodyOpenVPN.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3"><span class="font-bold text-blue-500 block">${descr}</span><span class="text-[10px] text-slate-400 font-mono">${mode}</span></td>
+                        <td class="p-3 font-mono text-amber-500">${port} / ${proto}</td>
+                        <td class="p-3 font-mono text-emerald-500">${tunnelNet}</td>
+                        <td class="p-3 font-mono max-w-xs truncate">${localNet}</td>
+                        <td class="p-3 font-mono text-slate-400">${cipher} (${digest})</td>
+                    </tr>
+                `;
+            });
+
+            const tbodyIPsec = document.getElementById('listIPsec');
+            tbodyIPsec.innerHTML = '';
+            const phase1s = xmlDocGlobal.querySelectorAll("ipsec > phase1");
+
+            phase1s.forEach(p1 => {
+                const ikeid = p1.querySelector("ikeid")?.textContent;
+                const descr = p1.querySelector("descr")?.textContent || 'Túnel IPsec';
+                const remoteGw = p1.querySelector("remote-gateway")?.textContent || '-';
+                const iketype = p1.querySelector("iketype")?.textContent || 'ikev2';
+                const authMethod = p1.querySelector("authentication_method")?.textContent || 'Pre-Shared Key';
+
+                const phase2s = xmlDocGlobal.querySelectorAll(`ipsec > phase2`);
+                let p2Count = 0;
+
+                phase2s.forEach(p2 => {
+                    if (p2.querySelector("ikeid")?.textContent === ikeid) {
+                        p2Count++;
+                        const localId = p2.querySelector("localid > type")?.textContent || 'LAN';
+                        const remoteAddr = p2.querySelector("remoteid > address")?.textContent || '-';
+                        const remoteBits = p2.querySelector("remoteid > netbits")?.textContent || '24';
+                        const p2Enc = p2.querySelector("encryption-algorithm-option > name")?.textContent || 'AES';
+
+                        tbodyIPsec.innerHTML += `
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-3 font-bold text-emerald-500">${descr}</td>
+                                <td class="p-3 font-mono text-amber-500">${remoteGw}</td>
+                                <td class="p-3 font-mono text-slate-400">${iketype.toUpperCase()} (${authMethod})</td>
+                                <td class="p-3 font-mono text-blue-500 uppercase">${localId}</td>
+                                <td class="p-3 font-mono text-emerald-500">${remoteAddr}/${remoteBits}</td>
+                                <td class="p-3 font-mono text-slate-400">${p2Enc.toUpperCase()}</td>
+                            </tr>
+                        `;
+                    }
+                });
+
+                if (p2Count === 0) {
+                    tbodyIPsec.innerHTML += `
+                        <tr class="hover:bg-slate-700/30">
+                            <td class="p-3 font-bold text-emerald-500">${descr}</td>
+                            <td class="p-3 font-mono text-amber-500">${remoteGw}</td>
+                            <td class="p-3 font-mono text-slate-400">${iketype.toUpperCase()} (${authMethod})</td>
+                            <td class="p-3 font-mono text-slate-500" colspan="3">Sem Fase 2 definida</td>
+                        </tr>
+                    `;
+                }
+            });
+        }
+
+        function parseAliases() {
+            const tbody = document.getElementById('listAliases');
+            tbody.innerHTML = '';
+            const aliases = xmlDocGlobal.querySelectorAll("aliases > alias");
+
+            document.getElementById('countAliases').textContent = aliases.length;
+
+            aliases.forEach(a => {
+                const name = a.querySelector("name")?.textContent || '-';
+                const type = a.querySelector("type")?.textContent || '-';
+                const address = a.querySelector("address")?.textContent || a.querySelector("url")?.textContent || '-';
+                const detail = a.querySelector("detail")?.textContent || '-';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-bold text-blue-500">${name}</td>
+                        <td class="p-3 font-mono text-slate-400 uppercase">${type}</td>
+                        <td class="p-3 font-mono max-w-md truncate">${address}</td>
+                        <td class="p-3 text-slate-400 text-[10px] max-w-xs truncate">${detail}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function parseDHCP() {
+            const tbody = document.getElementById('listDHCP');
+            tbody.innerHTML = '';
+            const dhcpIfaces = xmlDocGlobal.querySelectorAll("dhcpd > *");
+
+            dhcpIfaces.forEach(dhcp => {
+                const ifName = dhcp.tagName.toUpperCase();
+                const enabled = dhcp.querySelector("enable") !== null;
+                const from = dhcp.querySelector("range > from")?.textContent || '-';
+                const to = dhcp.querySelector("range > to")?.textContent || '-';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-bold text-blue-500">${ifName}</td>
+                        <td class="p-3">${enabled ? '<span class="bg-emerald-500/20 text-emerald-500 px-2 py-0.5 rounded font-bold text-[10px]">ATIVADO</span>' : '<span class="bg-slate-700 text-slate-400 px-2 py-0.5 rounded font-bold text-[10px]">DESATIVADO</span>'}</td>
+                        <td class="p-3 font-mono text-emerald-500">${from} &rarr; ${to}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function parseUsersAndGroups() {
+            const tbodyUsers = document.getElementById('listUsers');
+            tbodyUsers.innerHTML = '';
+            const users = xmlDocGlobal.querySelectorAll("system > user");
+
+            users.forEach(u => {
+                const username = u.querySelector("name")?.textContent || '-';
+                const descr = u.querySelector("descr")?.textContent || '-';
+                const group = u.querySelector("groupname")?.textContent || 'Sem grupo';
+                const uid = u.querySelector("uid")?.textContent || '-';
+
+                tbodyUsers.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-bold text-blue-500">${username}</td>
+                        <td class="p-3">${descr}</td>
+                        <td class="p-3 font-mono text-amber-500">${group}</td>
+                        <td class="p-3 font-mono text-slate-400">${uid}</td>
+                    </tr>
+                `;
+            });
+
+            const tbodyGroups = document.getElementById('listGroups');
+            tbodyGroups.innerHTML = '';
+            const groups = xmlDocGlobal.querySelectorAll("system > group");
+
+            groups.forEach(g => {
+                const name = g.querySelector("name")?.textContent || '-';
+                const descr = g.querySelector("description")?.textContent || '-';
+                const scope = g.querySelector("scope")?.textContent || 'system';
+                const gid = g.querySelector("gid")?.textContent || '-';
+
+                tbodyGroups.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-bold text-emerald-500">${name}</td>
+                        <td class="p-3">${descr}</td>
+                        <td class="p-3 font-mono text-slate-400 uppercase">${scope}</td>
+                        <td class="p-3 font-mono text-slate-400">${gid}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function parseCertificates() {
+            const tbodyCA = document.getElementById('listCA');
+            tbodyCA.innerHTML = '';
+            const cas = xmlDocGlobal.querySelectorAll("ca");
+
+            cas.forEach(c => {
+                const refid = c.querySelector("refid")?.textContent || '-';
+                const descr = c.querySelector("descr")?.textContent || '-';
+                const trust = c.querySelector("trust")?.textContent || 'enabled';
+
+                tbodyCA.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-mono text-amber-500">${refid}</td>
+                        <td class="p-3 font-bold">${descr}</td>
+                        <td class="p-3 font-mono text-slate-400 uppercase">${trust}</td>
+                    </tr>
+                `;
+            });
+
+            const tbodyCerts = document.getElementById('listCerts');
+            tbodyCerts.innerHTML = '';
+            const certs = xmlDocGlobal.querySelectorAll("cert");
+
+            certs.forEach(c => {
+                const refid = c.querySelector("refid")?.textContent || '-';
+                const descr = c.querySelector("descr")?.textContent || '-';
+                const type = c.querySelector("type")?.textContent || 'user/server';
+                const caref = c.querySelector("caref")?.textContent || '-';
+
+                tbodyCerts.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-mono text-blue-500">${refid}</td>
+                        <td class="p-3 font-bold">${descr}</td>
+                        <td class="p-3 font-mono text-emerald-500 uppercase">${type}</td>
+                        <td class="p-3 font-mono text-amber-500">${caref}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function parsePackages() {
+            const tbodyPkgs = document.getElementById('listPackages');
+            tbodyPkgs.innerHTML = '';
+            const pkgs = xmlDocGlobal.querySelectorAll("installedpackages > package");
+
+            pkgs.forEach(p => {
+                const name = p.querySelector("name")?.textContent || '-';
+                const version = p.querySelector("version")?.textContent || '-';
+                const cfg = p.querySelector("configurationfile")?.textContent || '-';
+                const descr = p.querySelector("descr")?.textContent || '-';
+
+                tbodyPkgs.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-bold text-blue-500">${name}</td>
+                        <td class="p-3 font-mono text-emerald-500">${version}</td>
+                        <td class="p-3 font-mono text-slate-400">${cfg}</td>
+                        <td class="p-3 max-w-xs truncate">${descr.replace(/<[^>]*>?/gm, '')}</td>
+                    </tr>
+                `;
+            });
+
+            const zabConfig = xmlDocGlobal.querySelector("zabbixagentlts > config");
+            if (zabConfig) {
+                document.getElementById('zabbixCard').classList.remove('hidden');
+                document.getElementById('zabServer').textContent = zabConfig.querySelector("server")?.textContent || '-';
+                document.getElementById('zabHost').textContent = zabConfig.querySelector("hostname")?.textContent || '-';
+                document.getElementById('zabPort').textContent = zabConfig.querySelector("listenport")?.textContent || '10050';
+                document.getElementById('zabStatus').textContent = zabConfig.querySelector("agentenabled")?.textContent === 'on' ? 'ATIVADO' : 'DESATIVADO';
+            }
+        }
+
+        function parseCron() {
+            const tbodyCron = document.getElementById('listCron');
+            tbodyCron.innerHTML = '';
+            const items = xmlDocGlobal.querySelectorAll("cron > item");
+
+            items.forEach(i => {
+                const min = i.querySelector("minute")?.textContent || '*';
+                const hour = i.querySelector("hour")?.textContent || '*';
+                const mday = i.querySelector("mday")?.textContent || '*';
+                const month = i.querySelector("month")?.textContent || '*';
+                const wday = i.querySelector("wday")?.textContent || '*';
+                const who = i.querySelector("who")?.textContent || 'root';
+                const cmd = i.querySelector("command")?.textContent || '-';
+
+                tbodyCron.innerHTML += `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-mono text-amber-500 font-bold">${min} ${hour} ${mday} ${month} ${wday}</td>
+                        <td class="p-3 font-mono text-blue-500">${who}</td>
+                        <td class="p-3 font-mono text-emerald-500">${cmd}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.className = "tab-btn py-2 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-400 hover:text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition";
+            });
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+
+            const btn = document.getElementById(`tab-${tabName}`);
+            const content = document.getElementById(`content-${tabName}`);
+
+            if (btn && content) {
+                btn.className = "tab-btn active py-2 px-3.5 font-semibold text-xs border-b-2 border-blue-500 text-blue-500 flex items-center gap-2 whitespace-nowrap rounded-t-lg transition";
+                content.classList.remove('hidden');
+            }
+        }
+
+        function filterFirewallRules() {
+            const query = document.getElementById('searchRules').value.toLowerCase();
+            const rows = document.querySelectorAll('#listFirewallRules tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
+
+        function resetViewer() {
+            xmlDocGlobal = null;
+            document.getElementById('xmlFileInput').value = '';
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('btnReset').classList.add('hidden');
+            document.getElementById('zabbixCard').classList.add('hidden');
+            document.getElementById('dropZone').classList.remove('hidden');
+        }
+
+        aplicarTemaSalvo();
+    </script>
+</body>
+</html>

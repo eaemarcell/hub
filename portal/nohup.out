@@ -1,0 +1,324 @@
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 39974)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [13/Aug/2026 20:52:30] "GET / HTTP/1.0" 200 -
+172.16.1.46 - - [13/Aug/2026 20:54:00] "POST /sdk HTTP/1.1" 404 -
+172.16.1.46 - - [13/Aug/2026 20:54:00] "GET / HTTP/1.0" 200 -
+172.16.1.46 - - [13/Aug/2026 20:54:00] code 404, message File not found
+172.16.1.46 - - [13/Aug/2026 20:54:00] "GET /nmaplowercheck1786654440 HTTP/1.1" 404 -
+172.16.1.46 - - [13/Aug/2026 20:54:00] code 404, message File not found
+172.16.1.46 - - [13/Aug/2026 20:54:00] "GET /HNAP1 HTTP/1.1" 404 -
+172.16.1.46 - - [13/Aug/2026 20:54:00] code 404, message File not found
+172.16.1.46 - - [13/Aug/2026 20:54:00] "GET /evox/about HTTP/1.1" 404 -
+172.16.1.46 - - [13/Aug/2026 20:54:01] "GET / HTTP/1.0" 200 -
+172.16.1.46 - - [13/Aug/2026 20:54:01] "GET / HTTP/1.1" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 30504)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [13/Aug/2026 21:01:06] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 30882)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [13/Aug/2026 21:07:16] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 4864)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [14/Aug/2026 03:10:39] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 45070)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [14/Aug/2026 09:14:04] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 47772)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [14/Aug/2026 15:17:41] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 56900)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [14/Aug/2026 20:12:31] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 5932)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [15/Aug/2026 22:43:26] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 6692)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [18/Aug/2026 00:05:36] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 22746)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [18/Aug/2026 07:03:51] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 17550)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [18/Aug/2026 21:04:09] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.46', 24230)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+172.16.1.46 - - [19/Aug/2026 11:03:11] "GET / HTTP/1.0" 200 -
+172.18.0.4 - - [19/Aug/2026 16:27:19] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:27:26] "POST /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:27:27] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:27:48] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:27:50] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:27:50] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:27:51] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:27:52] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:28:04] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:28:05] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:28:05] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:29:31] "POST /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:29:51] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:09] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:11] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:13] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:16] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:19] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:22] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:40] "POST /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:46] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:30:50] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:31:01] "POST /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:31:03] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:31:06] "GET /api/apps HTTP/1.1" 200 -
+172.18.0.4 - - [19/Aug/2026 16:42:47] "GET /api/apps HTTP/1.1" 200 -

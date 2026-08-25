@@ -1,0 +1,119 @@
+[
+  {
+    "id": "sighe",
+    "name": "SIGHE",
+    "url": "/sighe/",
+    "icon": "clock",
+    "color": "blue",
+    "isLocal": true,
+    "isDefault": true
+  },
+  {
+    "id": "pfviewer",
+    "name": "pfViewer",
+    "url": "/pfviewer/",
+    "icon": "shield-check",
+    "color": "blue",
+    "isLocal": true,
+    "isDefault": true
+  },
+  {
+    "id": "passgen",
+    "name": "PassGen",
+    "url": "/passgen/",
+    "icon": "key-round",
+    "color": "blue",
+    "isLocal": true,
+    "isDefault": true
+  },
+  {
+    "id": "app_1787156845914",
+    "name": "Zabbix - Monitoramento",
+    "url": "https://monitoramento02.amt.com.br/",
+    "icon": "activity",
+    "img": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/zabbix.png",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787156971575",
+    "name": "Wiki - AMT",
+    "url": "http://wiki.amt.net.br/doku.php?id=etsi",
+    "icon": "box",
+    "img": "https://media.licdn.com/dms/image/v2/C4D0BAQGvSA6OO3DGsg/company-logo_200_200/company-logo_200_200/0/1630500815877/amt_brasil_logo?e=2147483647&v=beta&t=vwemgj9tZYnp9aoLPiH4BRZSrAk-DaN0z3ISzx9hFRE",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787157169259",
+    "name": "Passbolt - Gestão de senhas AMT",
+    "url": "http://passbolt.amt.net.br/",
+    "icon": "lock",
+    "img": "https://djeqr6to3dedg.cloudfront.net/repo-logos/passbolt/passbolt/live/logo-1701856291449.png",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787158792390",
+    "name": "Priv AMT - Notas Temporárias",
+    "url": "https://priv.amt.com.br",
+    "icon": "lock",
+    "img": "https://media.licdn.com/dms/image/v2/C4D0BAQGvSA6OO3DGsg/company-logo_200_200/company-logo_200_200/0/1630500815877/amt_brasil_logo?e=2147483647&v=beta&t=vwemgj9tZYnp9aoLPiH4BRZSrAk-DaN0z3ISzx9hFRE",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787165450793",
+    "name": "Grafana Links AMT",
+    "url": "https://grafana.amt.com.br/d/9c581906-7cc8-41d1-9c3e-febcc69feb98/amt-links-com-vm?orgId=2&from=now-1h&to=now&timezone=browser&refresh=1m",
+    "icon": "globe",
+    "img": "https://static.cdnlogo.com/logos/g/64/grafana.svg",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787165462832",
+    "name": "Vivaz - Solution Desk",
+    "url": "https://solutiondesk.amt.com.br/",
+    "icon": "box",
+    "img": "https://www.pixsoft.com.br/img/logo-vivaz.webp",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787165535065",
+    "name": "Backup - Bacularis",
+    "url": "http://172.16.10.5:9097/web/login/",
+    "icon": "database",
+    "img": "https://avatars.githubusercontent.com/u/95772584?s=200&v=4",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787165565432",
+    "name": "Backup - Baculum",
+    "url": "http://172.16.10.18:9095/web/",
+    "icon": "database",
+    "img": "https://avatars.githubusercontent.com/u/95772584?s=200&v=4",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787170677873",
+    "name": "Kwik - Atendimento Chat",
+    "url": "https://kwik.app.br/",
+    "icon": "box",
+    "img": "https://kwik.app.br/static/media/kwik_color.f6459d28.png",
+    "isLocal": false,
+    "isDefault": false
+  },
+  {
+    "id": "app_1787230646913",
+    "name": "Grafana PROTEL",
+    "url": "https://grafana.amt.com.br/d/f1198758-231e-4e79-97e8-146650d33a951/protel-dashboard?from=now-1h&orgId=17&refresh=1m&timezone=browser&to=now",
+    "icon": "globe",
+    "img": "https://static.cdnlogo.com/logos/g/64/grafana.svg",
+    "isLocal": false,
+    "isDefault": false
+  }
+]
